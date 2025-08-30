@@ -24,7 +24,7 @@ VSTS = $(SRC)/*.c
 $(VSTS):
 	@echo "Compiling: $@"
 	# TODO: Add VST lib.a here:
-	$(GCC) $(CFLAGS) $(SRC)/lib/*.a $(SRC)/$@.c -o ./$@
+	$(GCC) $(CFLAGS) $(SRC)/lib/*.a -I./ $@.c -o ./$@
 
 install:
 	sh -c "./install_vst_plugins.sh"
