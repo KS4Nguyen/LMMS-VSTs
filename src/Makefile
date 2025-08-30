@@ -27,8 +27,8 @@ LIBS    := $(wildcard $(LIB_DIR)/*.a)
 .PHONY: all clean
 
 %: $(SRC_DIR)/%.c $(LIBS)
-    @echo "Compiling $< → $@"
-    $(CC) $(CFLAGS) -I$(SRC_DIR) $< $(LIBS) -o $@
+	@echo "Compiling $< → $@"
+	$(CC) $(CFLAGS) -I$(SRC_DIR) $< $(LIBS) -o $@
 
 install:
 	sh -c "./install_vst_plugins.sh"
