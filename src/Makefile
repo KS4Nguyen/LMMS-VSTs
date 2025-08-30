@@ -12,19 +12,23 @@ else
 	CFLAGS += -Wstringop-overflow #-Wstringop-truncation
 endif
 
-GCC := gcc
+CC := gcc
 
-SRC := .
-LIBS += -L./lib # TODO: Identify VST .a and include
+# Sources and Libraries:
+SRC_DIR := .
+LIB_DIR := ./lib
 
-VSTS = $(SRC)/*.c
+# Get all .c sources and compile them:
+SRCS    := $(wildcard $(SRC_DIR)/*.c)
+VSTS    := $(patsubst $(SRC_DIR)/%.c,%,$(SRCS))
 
-.PHONY: all clean $(VSTS)
+LIBS    := $(wildcard $(LIB_DIR)/*.a)
 
-$(VSTS):
-	@echo "Compiling: $@"
-	# TODO: Add VST lib.a here:
-	$(GCC) $(CFLAGS) $(SRC)/lib/*.a $(SRC)/$@.c -o ./$@
+.PHONY: all clean
+
+%: $(SRC_DIR)/%.c $(LIBS)
+    @echo "Compiling $< → $@"
+    $(CC) $(CFLAGS) -I$(SRC_DIR) $< $(LIBS) -o $@
 
 install:
 	sh -c "./install_vst_plugins.sh"
@@ -34,5 +38,6 @@ sdk:
 
 clean:
 	sh -c "rm -rf ./lib/VST_SDK_2.4/"
+@$(RM) $(PROGS)
 
 all: sdk $(VSTS)
