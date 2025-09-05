@@ -11,7 +11,7 @@ trap 'echo "Error: $BASH_COMMAND" >&2; exit 1' ERR
 #               ./lib/VST_SDK_2.4.tgz
 #
 OLDDIR=$(pwd)
-WDIR="./lib"
+WDIR="."
 
 cmake --version
 
@@ -27,5 +27,6 @@ cd build
 cmake ../
 make clean
 make all
+make VST_SDK
 
 cd $OLDDIR
