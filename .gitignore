@@ -1,3 +1,11 @@
+# File system
+plugins/*
+presets/*
+projects/*
+samples/*
+templates/*
+VST_SDK_2.4/
+
 # Prerequisites
 *.d
 
@@ -10,11 +18,3 @@
 *.la
 *.lo
 
-# File system
-plugins/*
-presets/*
-projects/*
-samples/*
-templates/*
-src/build/
-src/lib/VST_SDK_2.4/
