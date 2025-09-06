@@ -118,6 +118,8 @@ AEffect* main_macho(audioMasterCallback audioMaster) { return VSTPluginMain(audi
 #if defined(_WIN32)
 __declspec(dllexport)
 #endif
+
+//int main(audioMasterCallback audioMaster) { return VSTPluginMain(audioMaster); }
 AEffect* main(audioMasterCallback audioMaster) { return VSTPluginMain(audioMaster); }
 
 // --- Dispatcher
