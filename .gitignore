@@ -1,19 +1,25 @@
-# File system
+# LMMS filesystem
 plugins/*
 presets/*
 projects/*
 samples/*
 templates/*
+
+# SDK .tar
 VST_SDK_2.4/
 
-# Prerequisites
-*.d
+# Eclipse files
+.cproject
+.project
+.settings/
 
-# Object files
+# Build targets
+## Prerequisites
+*.d
+## Object files
 *.o
 *.ko
-
-# Libraries
+## Libraries
 *.a
 *.la
 *.lo
