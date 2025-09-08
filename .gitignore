@@ -13,6 +13,10 @@ VST_SDK_2.4/
 .project
 .settings/
 
+# Doxygen
+doc/
+Doxyfile.bak
+
 # Build targets
 ## Prerequisites
 *.d

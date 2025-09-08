@@ -1,4 +1,11 @@
-// vst_ringmod.c
+/**
+ * \name		vst_ringmod.c
+ * \author		KS_Nguyen (c) 2025 (see LICENSE file)
+ * 				sebastian.nguyen86@gmai.com
+ * \description	2-Channel Chromatic Ring Modulator
+ * \note		Modulator coeffients:
+ * 				A3=220Hz - one ocave below "Kammerton A"
+ */
 #include <math.h>
 #include <string.h>
 #include "aeffect.h"
@@ -14,27 +21,27 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-// --- Parameter-Indices
+// \brief	Parametes
 enum {
-    kParamNote = 0,     // 0..127 (MIDI-Note als Float)
-    kParamDetune,       // -100..+100 cents
+    kParamNote = 0,     // 0..127 (MIDI-Note as a float)
+    kParamDetune,       // -100..+100 percents
     kParamMix,          // 0..1
     kParamGain,         // 0..2
     kNumParams
 };
 
-// --- Plugin-State
+// \brief	Plugin-State
 typedef struct {
     float params[kNumParams];
     float sr;
     float phaseL, phaseR;
-    float phaseInc;          // aus aktueller Trägerfreq
-    int   midiNote;          // -1 wenn keiner aktiv
+    float phaseInc;          // aus aktueller Trägerfrequenz
+    int   midiNote;          // -1 if none active
     float targetFreq;
     float smoothedFreq;      // sanfter Übergang
 } RingModState;
 
-// --- Util: MIDI-Note -> Frequenz
+// \brief	Util: MIDI-Note -> Frequency (Hz) mit Detune in percent
 static float midi_to_freq(int note, float detune_cents) {
     // f = 440 * 2^((note-69)/12) * 2^(detune/1200)
     double n = (double)note - 69.0;
@@ -42,7 +49,7 @@ static float midi_to_freq(int note, float detune_cents) {
     return (float)f;
 }
 
-// --- Parameter-Helper (normalisiert <-> skaliert)
+// \brief	Parameter-Helper  (normalized and scaled)
 static float clampf(float x, float lo, float hi){ return x < lo ? lo : (x > hi ? hi : x); }
 
 static float param_to_note(float p){ return 127.0f * clampf(p, 0.f, 1.f); }        // 0..127
@@ -57,13 +64,13 @@ static float mix_to_param(float m){ return clampf(m,0.f,1.f); }
 static float param_to_gain(float p){ return 2.0f*clampf(p,0.f,1.f); }              // 0..2
 static float gain_to_param(float g){ return clampf(g/2.0f,0.f,1.f); }
 
-// --- Dispatcher / Callbacks Vorab-Deklarationen
+// \brief	Dispatcher & Callbacks
 static VstIntPtr dispatcher(AEffect* e, VstInt32 op, VstInt32 idx, VstIntPtr val, void* ptr, float opt);
 static void processReplacing(AEffect* e, float** in, float** out, VstInt32 samples);
 static void setParameter(AEffect* e, VstInt32 idx, float val);
 static float getParameter(AEffect* e, VstInt32 idx);
 
-// --- AEffect-Erzeugung
+// \brief	AEffect Object Generator
 static AEffect* createEffectInstance(audioMasterCallback audioMaster) {
     AEffect* effect = (AEffect*)calloc(1, sizeof(AEffect));
     RingModState* st = (RingModState*)calloc(1, sizeof(RingModState));
@@ -86,13 +93,13 @@ static AEffect* createEffectInstance(audioMasterCallback audioMaster) {
     effect->object = st;
     effect->user = NULL;
 
-    // Default-Parameter
-    st->params[kParamNote]   = note_to_param(57.0f); // A3=220 Hz als Start
+    // Default-Parameter Set
+    st->params[kParamNote]   = note_to_param(57.0f); // A3=220 Hz (Start Note)
     st->params[kParamDetune] = detune_to_param(0.0f);
     st->params[kParamMix]    = mix_to_param(1.0f);
     st->params[kParamGain]   = gain_to_param(1.0f);
 
-    st->sr = 44100.0f;
+    st->sr = 44100.0f; // default Sample Rate (CD quality)
     st->phaseL = st->phaseR = 0.0f;
     st->midiNote = -1;
     st->targetFreq = 220.0f;
@@ -102,7 +109,7 @@ static AEffect* createEffectInstance(audioMasterCallback audioMaster) {
     return effect;
 }
 
-// --- VST Entry Points
+// \brief	VST Entry Points
 #if defined(_WIN32)
 __declspec(dllexport)
 #endif
@@ -122,7 +129,7 @@ __declspec(dllexport)
 //int main(audioMasterCallback audioMaster) { return VSTPluginMain(audioMaster); }
 AEffect* main(audioMasterCallback audioMaster) { return VSTPluginMain(audioMaster); }
 
-// --- Dispatcher
+// \brief	Dispatcher
 static VstIntPtr dispatcher(AEffect* e, VstInt32 op, VstInt32 idx, VstIntPtr val, void* ptr, float opt) {
     RingModState* st = (RingModState*)e->object;
     switch (op) {
@@ -152,7 +159,7 @@ static VstIntPtr dispatcher(AEffect* e, VstInt32 op, VstInt32 idx, VstIntPtr val
             if (ptr && strcmp((char*)ptr, "receiveVstMidiEvent") == 0) return 1;
             return 0;
         case effProcessEvents: {
-            // MIDI verarbeiten
+            // MIDI verarbeiten (TODO: Link VST Events)
             VstEvents* evs = (VstEvents*)ptr;
             for (VstInt32 i = 0; i < evs->numEvents; ++i) {
                 if (evs->events[i]->type == kVstMidiType) {
@@ -177,13 +184,13 @@ static VstIntPtr dispatcher(AEffect* e, VstInt32 op, VstInt32 idx, VstIntPtr val
     return 0;
 }
 
-// --- Parameter setzen/lesen
+// \brief	Set Parameter
 static void setParameter(AEffect* e, VstInt32 idx, float val) {
     RingModState* st = (RingModState*)e->object;
     if (idx < 0 || idx >= kNumParams) return;
     st->params[idx] = clampf(val, 0.f, 1.f);
 
-    // Ziel-Frequenz updaten (sanftes Gleiten im Prozess)
+    // Update targetFreq if Note or Detune changed
     int note = (st->midiNote >= 0) ? st->midiNote : (int)roundf(param_to_note(st->params[kParamNote]));
     float det = param_to_detune(st->params[kParamDetune]);
     st->targetFreq = midi_to_freq(note, det);
@@ -195,7 +202,7 @@ static float getParameter(AEffect* e, VstInt32 idx) {
     return st->params[idx];
 }
 
-// --- Signalverarbeitung
+// \brief	Process (Replacing)
 static void processReplacing(AEffect* e, float** in, float** out, VstInt32 n) {
     RingModState* st = (RingModState*)e->object;
 
@@ -205,10 +212,10 @@ static void processReplacing(AEffect* e, float** in, float** out, VstInt32 n) {
     float mix  = param_to_mix(st->params[kParamMix]);
     float gain = param_to_gain(st->params[kParamGain]);
 
-    // Frequenz-Glide (sanft, samplegenau)
+    // Smooth Frequency Glide (sample-by-sample)
     const float glide = 0.0015f; // ~1.5 ms Zeitkonstante
     for (VstInt32 i = 0; i < n; ++i) {
-        // Update targetFreq ggf. durch aktive MIDI-Note
+        // Update targetFreq
         int curNote = (st->midiNote >= 0) ? st->midiNote : (int)roundf(param_to_note(st->params[kParamNote]));
         float det = param_to_detune(st->params[kParamDetune]);
         st->targetFreq = midi_to_freq(curNote, det);
@@ -216,7 +223,7 @@ static void processReplacing(AEffect* e, float** in, float** out, VstInt32 n) {
         st->smoothedFreq += (st->targetFreq - st->smoothedFreq) * glide;
         st->phaseInc = 2.0f * (float)M_PI * st->smoothedFreq / st->sr;
 
-        // Phasen inkrementieren
+        // Phase Increment
         st->phaseL += st->phaseInc;
         st->phaseR += st->phaseInc;
         if (st->phaseL > 2.0f*(float)M_PI) st->phaseL -= 2.0f*(float)M_PI;

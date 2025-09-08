@@ -36,7 +36,7 @@ LIBS	:= $(wildcard $(LIB_DIR)/*.a)
 all: sdk $(PROGS)
 
 %: $(SRC_DIR)/%.c $(LIBS)
-	@echo "Building $@"
+	@echo "Building $(PROGS)"
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $< $(LIBS) -o $@
 
 install:
@@ -49,3 +49,8 @@ clean:
 	@echo "Cleaning up..."
 	@rm -rf build $(SDK)
 	@rm -f $(PROGS)
+	@rm -rf doc
+
+doc:
+	@./generate_documentation.sh
+	@echo "Documentation located at: ./doc/html/index.html"
