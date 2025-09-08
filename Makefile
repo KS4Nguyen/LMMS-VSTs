@@ -33,7 +33,7 @@ LIBS	:= $(wildcard $(LIB_DIR)/*.a)
 .PHONY: all clean install sdk
 
 # Default Build Targets
-all: sdk $(PROGS)
+all: $(PROGS)
 
 %: $(SRC_DIR)/%.c $(LIBS)
 	@echo "Building $(PROGS)"

@@ -2,12 +2,38 @@
 
 # Audio Filters for LMMS
 
-Project Status
+**Repository Status**
 
-* Ring Modulator	![Status: In Progress]( https://img.shields.io/badge/Status-InProgress-yellow )
-* Spartializer  	![Status: Open]( https://img.shields.io/badge/Status-Open-gray )
+Ring Modulator
+![Status: In Progress]( https://img.shields.io/badge/Status-InProgress-yellow )
 
-# Project Sources and Usefull Links
+Spartializer
+![Status: Open]( https://img.shields.io/badge/Status-Open-gray )
+
+
+# Installation Instruction
+
+Install LMMS Audio Suite:
+
+	sudo apt update
+	sudo apt -y install lmms
+
+Compile and install the VST-SDK (version 2.4) run:
+
+	make sdk
+
+Then make the plugins:
+
+	make all
+
+Copy the plugins in your LMMS subdirectory **plugins/**
+
+To create code documentations in **./doc/html/index.html** run:
+
+	make doc
+	
+
+# Sources
 
 [DSP Filters](https://github.com/vinniefalco/DSPFilters)
 
