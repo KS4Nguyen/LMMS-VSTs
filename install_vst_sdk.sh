@@ -10,23 +10,39 @@ trap 'echo "Error: $BASH_COMMAND" >&2; exit 1' ERR
 #       * locally stored:
 #               ./lib/VST_SDK_2.4.tgz
 #
+
+VST_SDK=https://r-tur@bitbucket.org/r-tur/vst_sdk_2.4.git
+
 OLDDIR=$(pwd)
-WDIR="."
 
 cmake --version
 
-cd $WDIR
+filename="$(basename "$VST_SDK")"
+dir="${filename%.*}"
 
-tar -xzf VST_SDK_2.4.tgz
-cd VST_SDK_2.4/
-if [ ! -d ./build ]; then
-  mkdir build
+if [ ! -d "$dir" ]; then
+  git clone "$VST_SDK"
+else
+  cd "$dir"
+
+  # Inside SDK directory
+  git pull
+
+  if [ ! -d ./build ]; then
+    mkdir -p build/cmake.run.linux.x86_64.Local
+  fi
+  cd build/cmake.run.linux.x86_64.Local
+
+  # Inside the build directory
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -G "Unix Makefiles" ../..
+
+  make VST_SDK
+
+  # Leave build-directory and go back to SDK directory
+  cd ../..
 fi
-cd build
 
-cmake ../
-make clean
-make all
-make VST_SDK
 
 cd $OLDDIR
+
+# End-of-File

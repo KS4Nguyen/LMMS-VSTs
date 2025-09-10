@@ -15,7 +15,7 @@ endif
 
 # SDK
 SRC_DIR  := .
-SDK      := ./VST_SDK_2.4
+SDK      := ./vst_sdk_2.4
 LIB_DIR  := $(SDK)/build
 
 # Include Paths
@@ -33,7 +33,7 @@ LIBS	:= $(wildcard $(LIB_DIR)/*.a)
 .PHONY: all clean install sdk
 
 # Default Build Targets
-all: $(PROGS)
+all: sdk $(PROGS)
 
 %: $(SRC_DIR)/%.c $(LIBS)
 	@echo "Building $(PROGS)"

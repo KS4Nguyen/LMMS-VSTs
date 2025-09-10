@@ -1,7 +1,7 @@
 /**
  * \name		vst_ringmod.c
  * \author		KS_Nguyen (c) 2025 (see LICENSE file)
- * 				sebastian.nguyen86@gmai.com
+ * 				sebastian.nguyen86@gmail.com
  * \description	2-Channel Chromatic Ring Modulator
  * \note		Modulator coeffients:
  * 				A3=220Hz - one ocave below "Kammerton A"

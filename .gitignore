@@ -5,8 +5,8 @@ projects/*
 samples/*
 templates/*
 
-# SDK .tar
-VST_SDK_2.4/
+# SDK clone
+vst_sdk_2.4
 
 # Eclipse files
 .cproject
