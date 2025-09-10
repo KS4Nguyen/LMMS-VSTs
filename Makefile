@@ -30,7 +30,7 @@ PROGS	:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS))
 # VST Library
 LIBS	:= $(wildcard $(LIB_DIR)/*.a)
 
-.PHONY: all clean install sdk
+.PHONY: all clean install sdk total-clean
 
 # Default Build Targets
 all: sdk $(PROGS)
@@ -47,9 +47,12 @@ sdk:
 
 clean:
 	@echo "Cleaning up..."
-	@rm -rf build $(SDK)
+	@rm -rf $(LIB_DIR)
 	@rm -f $(PROGS)
+
+total-clean: clean
 	@rm -rf doc
+	@rm -rf $(SDK)
 
 doc:
 	@./generate_documentation.sh
