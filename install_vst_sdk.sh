@@ -22,11 +22,18 @@ dir="${filename%.*}"
 
 if [ ! -d "$dir" ]; then
   git clone "$VST_SDK"
-else
+  sync
+
   cd "$dir"
 
   # Inside SDK directory
   git pull
+fi
+
+if [ -d "$dir" ]; then
+  cd "$dir"
+
+  # Inside SDK directory
 
   if [ ! -d ./build ]; then
     mkdir -p build/cmake.run.linux.x86_64.Local

@@ -2,33 +2,71 @@
 
 # Audio Filters for LMMS
 
-**Repository Status**
 
 Ring Modulator
+
 ![Status: In Progress]( https://img.shields.io/badge/Status-InProgress-yellow )
 
 Spartializer
+
 ![Status: Open]( https://img.shields.io/badge/Status-Open-gray )
 
+Hello World Plugin
 
-# Installation Instruction
+	This is a plugin example from [pongasoft/vst24-hello-world]( https://github.com/pongasoft/vst24-hello-world ) to get started with VST 2.4 plugins.
 
-Install LMMS Audio Suite:
+
+
+# Installation Instructions
+
+
+1) __Dependencies__
+
+You can use the VST Plugins in Fruity-Loops, ...
+
+To Install LMMS on Linux run:
 
 	sudo apt update
 	sudo apt -y install lmms
 
-Compile and install the VST-SDK (version 2.4) run:
+For compiling the VST SDK (see next section) you need:
+
+* git
+
+* CMake & Ninja
+
+* build-essential package
+
+Get them with:
+
+	sudo apt update
+	sudo apt install -y git build-essential ninja-build
+
+
+2) __Compiling VST-SDK 2.4__
 
 	make sdk
 
-Then make the plugins:
 
-	make all
+3) __Creating the VST Plugins__
+
+	make
 
 Copy the plugins in your LMMS subdirectory **plugins/**
 
-To create code documentations in **./doc/html/index.html** run:
+
+# Code Documentations
+
+Doxygen is needed and can be installed with
+
+	sudo apt update 
+	sudo apt install -y doxygen
+
+The main page for the documentation will be generated at:
+	
+	./doc/html/index.html
+	
+Generate with:
 
 	make doc
 	

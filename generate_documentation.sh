@@ -5,9 +5,9 @@ set -euo pipefail
 
 trap 'echo "Error: $BASH_COMMAND" >&2; exit 1' ERR
 
-if [ "$(doxygen --version)" = ="" ]; then
+if [ "$(doxygen --version)" == "" ]; then
 	sudo apt update
-	sudo apt install -y doxygen
+	sudo apt install doxygen
 fi
 
 if [ ! -d doc ]; then
