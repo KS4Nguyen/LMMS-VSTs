@@ -907,8 +907,10 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = vst_sdk_2.4/public.sdk/source/vst2.x \
-                         vst_sdk_2.4/plugininterfaces/vst2.x \
-                         .
+                         vst_sdk_2.4/pluginterfaces/vst2.x \
+                         vst_hello_world.cpp \
+                         vst_cringmod.c \
+                         vst_spartializer.cpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

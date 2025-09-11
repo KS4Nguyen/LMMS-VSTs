@@ -24,18 +24,20 @@ INCLUDES :=	-I$(SRC_DIR) \
 		-I$(SDK)/public.sdk/source/vst2.x
 
 # Source Code
-SRCS	:= $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*.cpp)
-PROGS	:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS)) $(patsubst $(SRC_DIR)/%.cpp,%,$(SRCS))
+SRCS	:= $(wildcard $(SRC_DIR)/*.c)
+SRCS	+= $(wildcard $(SRC_DIR)/*.cpp)
+PROGS	:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS))
+PROGS	+= $(patsubst $(SRC_DIR)/%.cpp,%,$(SRCS))
 
 # VST Library
 LIBS	:= $(wildcard $(LIB_DIR)/*.a)
 
-.PHONY: all clean install sdk total-clean
+.PHONY: all clean install sdk doc
 
 # Default Build Targets
 all: sdk $(PROGS)
 
-%: $(SRC_DIR)/%.c $(LIBS)
+%: $(SRC_DIR)/%.c $(SRC_DIR)/%.cpp $(LIBS)
 	@echo "Building $(PROGS)"
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $< $(LIBS) -o $@
 
@@ -48,7 +50,7 @@ sdk:
 clean:
 	@echo "Cleaning up..."
 	@rm -rf $(LIB_DIR)
-	@rm -f $(PROGS)
+	#@rm -f $(PROGS)
 
 total-clean: clean
 	@rm -rf doc
