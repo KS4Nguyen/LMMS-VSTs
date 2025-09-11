@@ -24,8 +24,8 @@ INCLUDES :=	-I$(SRC_DIR) \
 		-I$(SDK)/public.sdk/source/vst2.x
 
 # Source Code
-SRCS	:= $(wildcard $(SRC_DIR)/*.c)
-PROGS	:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS))
+SRCS	:= $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*.cpp)
+PROGS	:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS)) $(patsubst $(SRC_DIR)/%.cpp,%,$(SRCS))
 
 # VST Library
 LIBS	:= $(wildcard $(LIB_DIR)/*.a)

@@ -4,6 +4,8 @@ presets/*
 projects/*
 samples/*
 templates/*
+recover.mmp
+recover.mmp.bak
 
 # SDK clone
 vst_sdk_2.4

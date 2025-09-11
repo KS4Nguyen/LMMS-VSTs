@@ -11,6 +11,10 @@ Spartializer
 
 ![Status: Open]( https://img.shields.io/badge/Status-Open-gray )
 
+Hello World Plugin
+
+	This is a plugin example from [pongasoft/vst24-hello-world]( https://github.com/pongasoft/vst24-hello-world ) to get started with VST 2.4 plugins.
+
 
 
 # Installation Instructions
