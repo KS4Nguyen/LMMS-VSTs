@@ -30,6 +30,8 @@ if [ ! -d "$dir" ]; then
   git pull
 fi
 
+cd $OLDDIR
+
 if [ -d "$dir" ]; then
   cd "$dir"
 
@@ -44,11 +46,7 @@ if [ -d "$dir" ]; then
   cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -G "Unix Makefiles" ../..
 
   make VST_SDK
-
-  # Leave build-directory and go back to SDK directory
-  cd ../..
 fi
-
 
 cd $OLDDIR
 
