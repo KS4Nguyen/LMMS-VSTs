@@ -19,15 +19,17 @@ SDK      := ./vst_sdk_2.4
 LIB_DIR  := $(SDK)/build
 
 # Include Paths
-INCLUDES :=	-I$(SRC_DIR) \
-		-I$(SDK)/pluginterfaces/vst2.x \
-		-I$(SDK)/public.sdk/source/vst2.x
+INCLUDES := -I$(SDK)/pluginterfaces/vst2.x
+INCLUDES += -I$(SDK)/public.sdk/source/vst2.x
 
 # Source Code
-SRCS	:= $(wildcard $(SRC_DIR)/*.c)
-SRCS	+= $(wildcard $(SRC_DIR)/*.cpp)
-PROGS	:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS))
-PROGS	+= $(patsubst $(SRC_DIR)/%.cpp,%,$(SRCS))
+SRCS_C		:= $(wildcard $(SRC_DIR)/*.c)
+SRCS_CPP	:= $(wildcard $(SRC_DIR)/*.cpp)
+SRCS		:= $(SRCS_C) $(SRCS_CPP)
+
+PROGS_C		:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS_C))
+PROGS_CPP	:= $(patsubst $(SRC_DIR)/%.cpp,%,$(SRCS_CPP))
+PROGS		:= $(PROGS_C) $(PROGS_CPP)
 
 # VST Library
 LIBS	:= $(wildcard $(LIB_DIR)/*.a)
@@ -48,14 +50,21 @@ sdk:
 	@./install_vst_sdk.sh
 
 clean:
-	@echo "Cleaning up..."
+	@echo "Cleaning up $(LIB_DIR) ..."
 	@rm -rf $(LIB_DIR)
-	#@rm -f $(PROGS)
+	@echo "Removing build targets: $(PROGS)"
+	@for i in $(PROGS); do \
+		if [ -e $$i ]; then \
+			rm $$i; \
+		fi; \
+	done
 
 total-clean: clean
+	@echo "Cleaning up./doc/ ..."
 	@rm -rf doc
+	@echo "Deleting $(SDK) ..."
 	@rm -rf $(SDK)
 
 doc:
 	@./generate_documentation.sh
-	@echo "Documentation located at: ./doc/html/index.html"
+	@echo "Code documentation generated as HTML at:\n  ./doc/html/index.html"
