@@ -2,19 +2,11 @@
 
 # Audio Filters for LMMS
 
+* __vst_cringmod__ 2-channel Ring Modulator ![Status: In Progress]( https://img.shields.io/badge/Status-InProgress-yellow )
 
-Ring Modulator
+* __vst_spartializer__ Spartializer ![Status: Open]( https://img.shields.io/badge/Status-Open-gray )
 
-![Status: In Progress]( https://img.shields.io/badge/Status-InProgress-yellow )
-
-Spartializer
-
-![Status: Open]( https://img.shields.io/badge/Status-Open-gray )
-
-Hello World Plugin
-
-	This is a plugin example from [pongasoft/vst24-hello-world]( https://github.com/pongasoft/vst24-hello-world ) to get started with VST 2.4 plugins.
-
+* __vst_hellow_world__ This is a plugin example from [pongasoft/vst24-hello-world]( https://github.com/pongasoft/vst24-hello-world ) to get started with VST 2.4 plugins.
 
 
 # Installation Instructions

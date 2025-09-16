@@ -20,6 +20,9 @@ doc/
 Doxyfile.bak
 
 # Build targets
+vst_hello_world
+vst_cringmod
+vst_spartializer
 ## Prerequisites
 *.d
 ## Object files

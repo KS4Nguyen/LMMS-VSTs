@@ -1,14 +1,16 @@
 # @Author:      KS4Nguyen <sebastian.nguyen86@gmail.com>
-# @Date:        2025-08-30
+# @Date:        2025-09-16
 
-# C++-Compiler n'these Flags
-CXX      := g++
-CXXFLAGS := -Wall
+# Compiler Flags
+CXX		:= g++
+CC		:= gcc
+CXXFLAGS	:= -Wall -fPIC -fpermissive
+CCFLAGS		:= -Wall
 
 ifeq ($(debug),on)
-	CXXFLAGS += -DDEBUG -Werror -g
+	CXXFLAGS += -O0 -DDEBUG -Werror -g
 else
-	CXXFLAGS += -O0 -Wno-unused -Wnonnull \
+	CXXFLAGS += -O2 -Wno-unused -Wnonnull \
 	-fstack-protector \
 	-Wstringop-overflow
 endif
@@ -19,13 +21,17 @@ SDK      := ./vst_sdk_2.4
 LIB_DIR  := $(SDK)/build
 
 # Include Paths
-INCLUDES := -I$(SDK)/pluginterfaces/vst2.x
-INCLUDES += -I$(SDK)/public.sdk/source/vst2.x
+INCLUDES :=	-I$(SDK)/pluginterfaces/vst2.x \
+		-I$(SDK)/public.sdk/source/vst2.x
 
 # Source Code
 SRCS_C		:= $(wildcard $(SRC_DIR)/*.c)
 SRCS_CPP	:= $(wildcard $(SRC_DIR)/*.cpp)
 SRCS		:= $(SRCS_C) $(SRCS_CPP)
+
+OBJS_C		:= $(SRCS_C:.c=.o)
+OBJS_CPP	:= $(SRCS_CPP:.cpp=.o)
+OBJS		:= $(OBJS_C) $(OBJS_CPP)
 
 PROGS_C		:= $(patsubst $(SRC_DIR)/%.c,%,$(SRCS_C))
 PROGS_CPP	:= $(patsubst $(SRC_DIR)/%.cpp,%,$(SRCS_CPP))
@@ -37,11 +43,21 @@ LIBS	:= $(wildcard $(LIB_DIR)/*.a)
 .PHONY: all clean install sdk doc
 
 # Default Build Targets
-all: sdk $(PROGS)
+all: $(PROGS)
 
-%: $(SRC_DIR)/%.c $(SRC_DIR)/%.cpp $(LIBS)
-	@echo "Building $(PROGS)"
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $< $(LIBS) -o $@
+# Compile objects with includes
+%.o: %.cpp
+	@echo "Compiling objects from .cpp sources ..."
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+%.o: %.c
+	@echo "Compiling objects from .c sources ..."
+	$(CC) $(CCFLAGS) $(INCLUDES) -c $< -o $@
+
+# Link everything to shared library (no-main-function permitted)
+$(PROGS): $(OBJS) $(LIBS)
+	@echo "Linking $@"
+	$(CC) -shared -o $@ $^
 
 install:
 	@./install_vst_plugins.sh
