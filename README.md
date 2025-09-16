@@ -66,7 +66,7 @@ Generate with:
 
 [8 Ways to Use the Ring Modulator]( https://www.youtube.com/watch?v=aeTm5cc_BbI )
 
-I like that gran-turismo sound so much like the __Trem__ and __Univibe__ sound so much :-)
+I like that gran-turismo sound so much like the __Trem__ and __Univibe__
 	
 
 # Sources
