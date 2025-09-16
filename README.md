@@ -61,14 +61,20 @@ The main page for the documentation will be generated at:
 Generate with:
 
 	make doc
+
+# What it can do
+
+[8 Ways to Use the Ring Modulator]( https://www.youtube.com/watch?v=aeTm5cc_BbI )
+
+I like that gran-turismo sound so much like the __Trem__ and __Univibe__ sound so much :-)
 	
 
 # Sources
 
-[DSP Filters](https://github.com/vinniefalco/DSPFilters)
+[DSP Filters]( https://github.com/vinniefalco/DSPFilters )
 
-[JFilters (C++)](https://github.com/Iunusov/JFilters)
+[JFilters (C++)]( https://github.com/Iunusov/JFilters )
 
 Not used in this repo, but will be usefull:
 
-[LibSndFile](https://github.com/libsndfile/libsndfile.git)
+[LibSndFile]( https://github.com/libsndfile/libsndfile.git )
